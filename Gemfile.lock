@@ -76,6 +76,9 @@ GEM
       tzinfo (~> 2.0, >= 2.0.5)
     addressable (2.8.9)
       public_suffix (>= 2.0.2, < 8.0)
+    annotaterb (4.22.0)
+      activerecord (>= 6.0.0)
+      activesupport (>= 6.0.0)
     ast (2.4.3)
     base64 (0.3.0)
     bcrypt (3.1.21)
@@ -310,6 +313,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  annotaterb
   bootsnap
   brakeman
   debug
