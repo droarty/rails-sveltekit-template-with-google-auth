@@ -25,7 +25,7 @@ module Api
       private
 
       def user_json(user)
-        { id: user.id, email: user.email }
+        { id: user.id, email: user.email, role: user.role }
       end
 
       def respond_to_on_destroy

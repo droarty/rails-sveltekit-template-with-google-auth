@@ -55,7 +55,7 @@ export const auth = {
 	},
 
 	currentUser() {
-		return request<{ user: { id: number; email: string } }>('/api/v1/me');
+		return request<{ user: { id: number; email: string; role: string } }>('/api/v1/me');
 	}
 };
 
