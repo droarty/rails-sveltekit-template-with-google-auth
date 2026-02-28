@@ -16,7 +16,7 @@ module Api
       private
 
       def frontend_url
-        ENV.fetch("FRONTEND_URL", "").chomp("/")
+        Rails.application.credentials.dig(:google_auth, :frontend_url).to_s.chomp("/")
       end
     end
   end

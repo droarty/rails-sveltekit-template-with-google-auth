@@ -309,8 +309,8 @@ Devise.setup do |config|
   config.responder.redirect_status = :see_other
 
   config.omniauth :google_oauth2,
-                  ENV.fetch("GOOGLE_CLIENT_ID", ""),
-                  ENV.fetch("GOOGLE_CLIENT_SECRET", ""),
+                  Rails.application.credentials.dig(:google_auth, :google_client_id),
+                  Rails.application.credentials.dig(:google_auth, :google_client_secret),
                   scope: "email,profile"
 
   # ==> Configuration for :registerable
