@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { auth } from '$lib/api';
 
@@ -6,6 +7,12 @@
 	let password = $state('');
 	let error = $state('');
 	let submitting = $state(false);
+	let csrfToken = $state('');
+
+	onMount(() => {
+		const match = document.cookie.match(/(?:^|; )XSRF-TOKEN=([^;]*)/);
+		csrfToken = match ? decodeURIComponent(match[1]) : '';
+	});
 
 	async function handleSubmit(e: SubmitEvent) {
 		e.preventDefault();
@@ -44,6 +51,13 @@
 			{submitting ? 'Signing in…' : 'Sign in'}
 		</button>
 	</form>
+
+	<div class="divider">or</div>
+
+	<form method="POST" action="/api/v1/auth/auth/google_oauth2">
+		<input type="hidden" name="authenticity_token" value={csrfToken} />
+		<button type="submit" class="google-btn">Sign in with Google</button>
+	</form>
 </main>
 
 <style>
@@ -64,5 +78,13 @@
 	}
 	.error {
 		color: red;
+	}
+	.divider {
+		text-align: center;
+		margin: 1rem 0;
+		color: #666;
+	}
+	.google-btn {
+		width: 100%;
 	}
 </style>
