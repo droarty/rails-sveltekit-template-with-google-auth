@@ -34,8 +34,11 @@
 		<p>Welcome, {user.email}!</p>
 		<button
 			onclick={async () => {
-				await auth.logout();
-				goto('/login');
+				try {
+					await auth.logout();
+				} finally {
+					goto('/login');
+				}
 			}}
 		>
 			Sign out
