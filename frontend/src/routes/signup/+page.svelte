@@ -1,28 +1,27 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { auth } from '$lib/api';
 
 	let email = $state('');
 	let password = $state('');
+	let passwordConfirmation = $state('');
 	let error = $state('');
 	let submitting = $state(false);
-	let csrfToken = $state('');
-
-	onMount(() => {
-		const match = document.cookie.match(/(?:^|; )XSRF-TOKEN=([^;]*)/);
-		csrfToken = match ? decodeURIComponent(match[1]) : '';
-	});
 
 	async function handleSubmit(e: SubmitEvent) {
 		e.preventDefault();
 		error = '';
 		submitting = true;
 		try {
-			await auth.login(email, password);
+			await auth.register(email, password, passwordConfirmation);
 			goto('/');
 		} catch (err: unknown) {
-			error = err instanceof Error ? err.message : 'Login failed';
+			if (err instanceof Error && 'body' in err) {
+				const body = (err as { body: { errors?: string[] } }).body;
+				error = body.errors?.join(', ') ?? err.message;
+			} else {
+				error = err instanceof Error ? err.message : 'Registration failed';
+			}
 		} finally {
 			submitting = false;
 		}
@@ -30,7 +29,7 @@
 </script>
 
 <main>
-	<h1>Sign in</h1>
+	<h1>Create account</h1>
 
 	{#if error}
 		<p class="error">{error}</p>
@@ -44,22 +43,20 @@
 
 		<label>
 			Password
-			<input type="password" bind:value={password} required autocomplete="current-password" />
+			<input type="password" bind:value={password} required autocomplete="new-password" />
+		</label>
+
+		<label>
+			Confirm password
+			<input type="password" bind:value={passwordConfirmation} required autocomplete="new-password" />
 		</label>
 
 		<button type="submit" disabled={submitting}>
-			{submitting ? 'Signing in…' : 'Sign in'}
+			{submitting ? 'Creating account…' : 'Create account'}
 		</button>
 	</form>
 
-	<p class="signup-link">Don't have an account? <a href="/signup">Create one</a></p>
-
-	<div class="divider">or</div>
-
-	<form method="POST" action="/api/v1/auth/auth/google_oauth2">
-		<input type="hidden" name="authenticity_token" value={csrfToken} />
-		<button type="submit" class="google-btn">Sign in with Google</button>
-	</form>
+	<p class="login-link">Already have an account? <a href="/login">Sign in</a></p>
 </main>
 
 <style>
@@ -81,15 +78,7 @@
 	.error {
 		color: red;
 	}
-	.divider {
-		text-align: center;
-		margin: 1rem 0;
-		color: #666;
-	}
-	.google-btn {
-		width: 100%;
-	}
-	.signup-link {
+	.login-link {
 		margin-top: 1rem;
 		text-align: center;
 	}

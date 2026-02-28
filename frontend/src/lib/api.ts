@@ -34,6 +34,13 @@ async function request<T>(
 }
 
 export const auth = {
+	register(email: string, password: string, passwordConfirmation: string) {
+		return request<{ user: { id: number; email: string; role: string } }>('/api/v1/auth', {
+			method: 'POST',
+			body: JSON.stringify({ user: { email, password, password_confirmation: passwordConfirmation } })
+		});
+	},
+
 	login(email: string, password: string) {
 		return request<{ user: { id: number; email: string } }>('/api/v1/auth/sign_in', {
 			method: 'POST',

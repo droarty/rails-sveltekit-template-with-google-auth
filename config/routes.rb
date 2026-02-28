@@ -3,6 +3,7 @@ Rails.application.routes.draw do
              path: "api/v1/auth",
              controllers: {
                sessions: "api/v1/sessions",
+               registrations: "api/v1/registrations",
                omniauth_callbacks: "api/v1/omniauth_callbacks"
              },
              defaults: { format: :json }
