@@ -66,3 +66,6 @@ build-iPhoneSimulator/
 /frontend/node_modules/
 
 /config/credentials/development.key
+temp_auto_push.bat
+temp_interactive_push.bat
+branch_structure.json
