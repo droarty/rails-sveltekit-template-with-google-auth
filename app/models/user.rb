@@ -27,7 +27,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: [ :google_oauth2 ]
 
-  enum :role, { user: 0, superuser: 1 }
+  enum :role, { user: 0, superuser: 1, author: 2 }
 
   def self.from_omniauth(auth)
     find_or_initialize_by(provider: auth.provider, uid: auth.uid).tap do |user|
