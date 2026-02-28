@@ -5,13 +5,10 @@
 	let { children } = $props();
 
 	onMount(async () => {
-		const hasCsrf = document.cookie.includes('XSRF-TOKEN');
-		if (!hasCsrf) {
-			try {
-				await fetch('/api/v1/csrf', { credentials: 'include' });
-			} catch {
-				// Non-fatal: CSRF cookie will be set on next server-rendered response
-			}
+		try {
+			await fetch('/api/v1/csrf', { credentials: 'include' });
+		} catch {
+			// Non-fatal
 		}
 	});
 </script>
